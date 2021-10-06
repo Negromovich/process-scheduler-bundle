@@ -1,0 +1,83 @@
+services:
+    negromovich.process_scheduler.job_processor:
+        class: Negromovich\ProcessSchedulerBundle\Processor\JobProcessor
+        arguments:
+            - '@logger'
+            - '@doctrine.orm.entity_manager'
+            - '@negromovich.process_scheduler.job_repository'
+            - '@negromovich.process_scheduler.job_processor_status'
+
+    negromovich.process_scheduler.job_processor_status:
+        class: Negromovich\ProcessSchedulerBundle\Processor\JobProcessorStatus
+        arguments:
+            - '@negromovich.process_scheduler.job_status_repository'
+
+    negromovich.process_scheduler.job_repository:
+        class: Negromovich\ProcessSchedulerBundle\Repository\JobRepository
+        arguments:
+            - '@doctrine'
+
+    negromovich.process_scheduler.job_status_repository:
+        class: Negromovich\ProcessSchedulerBundle\Repository\JobStatusRepository
+        arguments:
+            - '@doctrine'
+
+    negromovich.process_scheduler.worker_command:
+        class: Negromovich\ProcessSchedulerBundle\Command\WorkerCommand
+        arguments:
+            - '@negromovich.process_scheduler.job_processor'
+            - '@negromovich.process_scheduler.job_status_repository'
+            - '@logger'
+        tags:
+            - 'console.command'
+
+    negromovich.process_scheduler.worker_stop_command:
+        class: Negromovich\ProcessSchedulerBundle\Command\WorkerStopCommand
+        arguments:
+            - '@negromovich.process_scheduler.job_status_repository'
+            - '@logger'
+        tags:
+            - 'console.command'
+
+    negromovich.process_scheduler.clear_job_command:
+        class: Negromovich\ProcessSchedulerBundle\Command\ClearJobCommand
+        arguments:
+            - '@negromovich.process_scheduler.job_repository'
+            - '@logger'
+        tags:
+            - 'console.command'
+
+    negromovich.process_scheduler.failed_running_job_command:
+        class: Negromovich\ProcessSchedulerBundle\Command\FailedRunningJobCommand
+        arguments:
+            - '@negromovich.process_scheduler.job_repository'
+            - '@logger'
+        tags:
+            - 'console.command'
+
+    negromovich.process_scheduler.notification.notify_failed_job_command:
+        class: Negromovich\ProcessSchedulerBundle\Command\Notification\NotifyFailedJobCommand
+        arguments:
+            - '@Symfony\Component\Notifier\NotifierInterface'
+            - '@negromovich.process_scheduler.job_repository'
+        tags:
+            - 'console.command'
+
+    negromovich.process_scheduler.notification.notify_non_running_job_command:
+        class: Negromovich\ProcessSchedulerBundle\Command\Notification\NotifyNonRunningJobCommand
+        arguments:
+            - '@Symfony\Component\Notifier\NotifierInterface'
+            - '@negromovich.process_scheduler.job_repository'
+        tags:
+            - 'console.command'
+
+    Negromovich\ProcessSchedulerBundle\Processor\JobProcessor: '@negromovich.process_scheduler.job_processor'
+    Negromovich\ProcessSchedulerBundle\Processor\JobProcessorStatus: '@negromovich.process_scheduler.job_processor_status'
+    Negromovich\ProcessSchedulerBundle\Repository\JobRepository: '@negromovich.process_scheduler.job_repository'
+    Negromovich\ProcessSchedulerBundle\Repository\JobStatusRepository: '@negromovich.process_scheduler.job_status_repository'
+    Negromovich\ProcessSchedulerBundle\Command\WorkerCommand: '@negromovich.process_scheduler.worker_command'
+    Negromovich\ProcessSchedulerBundle\Command\WorkerStopCommand: '@negromovich.process_scheduler.worker_stop_command'
+    Negromovich\ProcessSchedulerBundle\Command\ClearJobCommand: '@negromovich.process_scheduler.clear_job_command'
+    Negromovich\ProcessSchedulerBundle\Command\FailedRunningJobCommand: '@negromovich.process_scheduler.failed_running_job_command'
+    Negromovich\ProcessSchedulerBundle\Command\Notification\NotifyFailedJobCommand: '@negromovich.process_scheduler.notification.notify_failed_job_command'
+    Negromovich\ProcessSchedulerBundle\Command\Notification\NotifyNonRunningJobCommand: '@negromovich.process_scheduler.notification.notify_non_running_job_command'

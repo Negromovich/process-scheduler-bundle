@@ -1,0 +1,26 @@
+{
+    "name": "negromovich/process-scheduler-bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aliaksandr Markhvida",
+            "email": "me@mal.by"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "doctrine/doctrine-bundle": "^2.2",
+        "doctrine/orm": "^2.7",
+        "symfony/console": "^5.1",
+        "symfony/uid": "^5.1",
+        "symfony/notifier": "^5.1",
+        "symfony/process": "^5.1"
+    },
+    "require-dev": {
+        "symfony/symfony": "^5.1"
+    },
+    "autoload": {
+        "psr-4": { "Negromovich\\ProcessSchedulerBundle\\": "src" }
+    }
+}
