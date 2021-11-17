@@ -29,7 +29,16 @@ class JobProcess
     private static function prepareCommand(array $command): array
     {
         if (($command[0] ?? null) === 'bin/console') {
-            $command[0] = __DIR__ . '/../../../bin/console';
+            $attempts = 15;
+            $dir = __DIR__ . '/../../';
+            while ($attempts-- > 0) {
+                $binConsole = $dir . 'bin/console';
+                if (file_exists($binConsole)) {
+                    $command[0] = $binConsole;
+                    break;
+                }
+                $dir .= '../';
+            }
         }
         return $command;
     }
