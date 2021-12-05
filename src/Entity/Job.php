@@ -151,6 +151,11 @@ class Job
         return $this->id;
     }
 
+    public function getQueue(): string
+    {
+        return $this->queue;
+    }
+
     public function getCommand(): array
     {
         return $this->command;
@@ -159,5 +164,10 @@ class Job
     public function getTimeout(): ?float
     {
         return $this->timeout;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 }
