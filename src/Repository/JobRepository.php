@@ -79,7 +79,7 @@ class JobRepository extends ServiceEntityRepository
         return (int)$qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findNumberNonRunning(?string $queue = null): int
+    public function findNumberNonRunning(?string $queue = null, ?\DateTimeImmutable $executeAfter = null): int
     {
         $qb = $this->createQueryBuilder('j');
         $qb->select('COUNT(j.id)');
@@ -89,8 +89,8 @@ class JobRepository extends ServiceEntityRepository
         }
         $qb->andWhere($qb->expr()->eq('j.state', ':state'))
             ->setParameter('state', JobState::PENDING);
-        $qb->andWhere($qb->expr()->lt('j.executeAfter', ':now'))
-            ->setParameter('now', new \DateTimeImmutable('now'));
+        $qb->andWhere($qb->expr()->lt('j.executeAfter', ':executeAfter'))
+            ->setParameter('executeAfter', $executeAfter ?? new \DateTimeImmutable('now'));
         return (int)$qb->getQuery()->getSingleScalarResult();
     }
 

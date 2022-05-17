@@ -33,12 +33,17 @@ class NotifyNonRunningJobCommand extends Command
             100
         );
         $this->addArgument('queue', InputArgument::OPTIONAL, 'Queue name');
+        $this->addArgument('after', InputArgument::OPTIONAL, 'Datetime for filtering by executeAfter time');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $queue = $input->getArgument('queue');
-        $value = $this->jobRepository->findNumberNonRunning($queue);
+        $after = $input->getArgument('after');
+        if ($after !== null) {
+            $after = new \DateTimeImmutable($after);
+        }
+        $value = $this->jobRepository->findNumberNonRunning($queue, $after);
 
         $output->writeln(sprintf('Find %d non running jobs', $value));
 
