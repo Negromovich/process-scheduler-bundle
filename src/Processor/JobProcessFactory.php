@@ -9,13 +9,19 @@ use Symfony\Component\Process\Process;
 
 class JobProcessFactory
 {
+    private ?array $env;
     private ?string $phpPath = null;
     private ?string $binConsolePath = null;
+
+    public function __construct(?array $env = null)
+    {
+        $this->env = $env;
+    }
 
     public function run(Job $job, LoggerInterface $logger): JobProcess
     {
         $command = $this->prepareCommand($job->getCommand());
-        $process = new Process($command, null, null, null, $job->getTimeout());
+        $process = new Process($command, null, $this->env, null, $job->getTimeout());
         $jobProcess = new JobProcess($job, $process, $logger);
         $jobProcess->start();
         return $jobProcess;

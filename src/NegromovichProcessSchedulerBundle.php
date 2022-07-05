@@ -5,6 +5,6 @@ namespace Negromovich\ProcessSchedulerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ProcessSchedulerBundle extends Bundle
+class NegromovichProcessSchedulerBundle extends Bundle
 {
 }
