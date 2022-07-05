@@ -6,11 +6,15 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@negromovich.process_scheduler.job_repository'
             - '@negromovich.process_scheduler.job_processor_status'
+            - '@negromovich.process_scheduler.job_process_factory'
 
     negromovich.process_scheduler.job_processor_status:
         class: Negromovich\ProcessSchedulerBundle\Processor\JobProcessorStatus
         arguments:
             - '@negromovich.process_scheduler.job_status_repository'
+
+    negromovich.process_scheduler.job_process_factory:
+        class: Negromovich\ProcessSchedulerBundle\Processor\JobProcessFactory
 
     negromovich.process_scheduler.job_repository:
         class: Negromovich\ProcessSchedulerBundle\Repository\JobRepository
@@ -73,6 +77,7 @@ services:
 
     Negromovich\ProcessSchedulerBundle\Processor\JobProcessor: '@negromovich.process_scheduler.job_processor'
     Negromovich\ProcessSchedulerBundle\Processor\JobProcessorStatus: '@negromovich.process_scheduler.job_processor_status'
+    Negromovich\ProcessSchedulerBundle\Processor\JobProcessFactory: '@negromovich.process_scheduler.job_process_factory'
     Negromovich\ProcessSchedulerBundle\Repository\JobRepository: '@negromovich.process_scheduler.job_repository'
     Negromovich\ProcessSchedulerBundle\Repository\JobStatusRepository: '@negromovich.process_scheduler.job_status_repository'
     Negromovich\ProcessSchedulerBundle\Command\WorkerCommand: '@negromovich.process_scheduler.worker_command'
