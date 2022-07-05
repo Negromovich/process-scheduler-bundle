@@ -13,6 +13,7 @@ class JobProcessorState
     private EntityManagerInterface $em;
     private JobRepository $jobRepository;
     private JobProcessorStatus $jobProcessorStatus;
+    private JobProcessFactory $jobProcessFactory;
     private string $queue;
     private int $concurrency;
     private int $idle;
@@ -25,6 +26,7 @@ class JobProcessorState
         EntityManagerInterface $em,
         JobRepository $jobRepository,
         JobProcessorStatus $jobProcessorStatus,
+        JobProcessFactory $jobProcessFactory,
         string $queue = 'default',
         int $concurrency = 1,
         float $idle = 1.0
@@ -33,6 +35,7 @@ class JobProcessorState
         $this->em = $em;
         $this->jobRepository = $jobRepository;
         $this->jobProcessorStatus = $jobProcessorStatus;
+        $this->jobProcessFactory = $jobProcessFactory;
         $this->queue = $queue;
         $this->concurrency = $concurrency;
         $this->idle = (int)round(1_000_000 * $idle);
@@ -55,7 +58,7 @@ class JobProcessorState
         while ($this->concurrency - count($this->list) > 0) {
             $job = $this->jobRepository->findNextJob($this->queue);
             if ($job) {
-                $this->list[] = JobProcess::run($job, $this->logger);
+                $this->list[] = $this->jobProcessFactory->run($job, $this->logger);
                 $this->em->flush();
             } else {
                 break;

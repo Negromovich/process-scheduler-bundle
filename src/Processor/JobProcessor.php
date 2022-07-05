@@ -13,17 +13,20 @@ class JobProcessor
     private EntityManagerInterface $em;
     private JobRepository $jobRepository;
     private JobProcessorStatus $jobProcessorStatus;
+    private JobProcessFactory $jobProcessFactory;
 
     public function __construct(
         LoggerInterface $logger,
         EntityManagerInterface $em,
         JobRepository $jobRepository,
-        JobProcessorStatus $jobProcessorStatus
+        JobProcessorStatus $jobProcessorStatus,
+        JobProcessFactory $jobProcessFactory
     ) {
         $this->logger = $logger;
         $this->em = $em;
         $this->jobRepository = $jobRepository;
         $this->jobProcessorStatus = $jobProcessorStatus;
+        $this->jobProcessFactory = $jobProcessFactory;
     }
 
     public function processJobs(string $queue, int $concurrency = 1, float $idle = 1): void
@@ -33,6 +36,7 @@ class JobProcessor
             $this->em,
             $this->jobRepository,
             $this->jobProcessorStatus,
+            $this->jobProcessFactory,
             $queue,
             $concurrency,
             $idle
